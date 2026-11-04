@@ -9,7 +9,7 @@ The general icon is located in the folder with the main json entity. It is used 
 
 ### Colors
 
-Any colors are used. Basically, the colors of the fraction to which the entity will belong are used.
+Any colors are used. Basically, the colors of the faction to which the entity will belong are used.
 
 ## Strategic
 
