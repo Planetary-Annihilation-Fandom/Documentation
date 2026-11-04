@@ -12,6 +12,10 @@
 | World | [Layers](Entities/World/Layers.md) |
 | Galactic War | [Basics](Galactic%20War%20Modding.md) |
 
+## Debugging
+
+[Debug guide](Debug/README.md) covers attaching to the game over CDP, navigating scenes, testing Galactic War and battles, and inspecting engine behavior.
+
 ## Software
 
 No additional software is required, but these tools can make mod development easier.
