@@ -16,7 +16,7 @@ server.exe --headless --no-players --disable-replays --scripturl C:\path\to\scri
 server.exe --headless --no-players --disable-replays --scripturl C:\path\to\script\ --state benchmark
 ```
 
-`--scripturl` takes a plain Windows directory path. A `file:///` URL failed to mount, and so did a path containing spaces or non-ASCII characters.
+`--scripturl` takes a plain directory path; spaces and non-ASCII characters are fine. A `file:///` URL failed to mount.
 
 ### Limits of the dump
 
