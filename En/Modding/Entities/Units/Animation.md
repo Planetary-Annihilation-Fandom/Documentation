@@ -209,6 +209,8 @@ Typical node entry for recoil
 ```
 **Effects (.pfx) and audio in animation trees**
 
+For the `.pfx` file format and particle properties, see [Particle systems](../../Effects/Particle%20System.md).
+
 It is also possible to add effects and audio in anim trees. As this uses a combination of many operations and functions I will use an example to explain.
 
 This example is from the "titan_bot_anim_tree.json", I have not included the entirety of this sequence or the transitions. Here we can see that when the unit is walking it will scale to the move speed and use the animation "walk" which will loop/repeat. You can use the "events" node to time certain audio and effects. You can see the node setup below.

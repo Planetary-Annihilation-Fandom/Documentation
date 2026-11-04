@@ -8,6 +8,7 @@
 | Units | [Properties](Entities/Units/Basics.md), [Audio](Entities/Units/Audio.md), [Navigation](Entities/Units/Navigation.md), [Recon](Entities/Units/Recon.md), [Tools](Entities/Units/Tools.md), [Animation](Entities/Units/Animation.md), [Schemas](Entities/Units/Schemas/README.md) |
 | Buildings | [Properties](Entities/Buildings/Basics.md), [Factory](Entities/Buildings/Factories.md) |
 | Weapons and Tools | [Properties](Entities/Weapons%20and%20Tools/Basics.md), [Schemas](Entities/Weapons%20and%20Tools/Schemas/README.md) |
+| Effects | [Particle systems](Effects/README.md) |
 | User Interface | [Build Bar](Entities/User%20Interface/Build%20Bar.md), [Icons](Entities/User%20Interface/Icons.md) |
 | World | [Layers](Entities/World/Layers.md) |
 | Galactic War | [Basics](Galactic%20War%20Modding.md) |

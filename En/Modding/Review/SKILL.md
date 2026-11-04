@@ -93,7 +93,7 @@ Consult `references/` only as needed; each file is self-contained:
 | `modinfo-reference.md` | Every manifest key, `priority` semantics, the identifier triangle |
 | `scenes-reference.md` | All 59 scene keys and the loading mechanics |
 | `chrome40.md` | What the JS engine accepts, and what it does not |
-| `particle-system.md` | The full `.pfx` guide |
+| `../Effects/Particle System.md` | The `.pfx` format and particle-system behavior |
 | `unit-json/` | Unit, tool, ammo and anim-tree specs, plus draft-07 schemas |
 | `client-server-mods.md` | Client vs server, companions, the paired-mod pattern |
 | `compliance.md` | Distribution, packaging and privacy rules |
@@ -237,8 +237,8 @@ State these in the report rather than letting silence imply coverage:
 - Server-mod conduct restrictions cannot be established statically and are always raised as
   Unverified.
 - Base-game vocabulary snapshots (`references/pfx-keys.json`) and the scene list go stale
-  after a PA patch. Regeneration commands are in `particle-system.md` and
-  `scenes-reference.md`.
+  after a PA patch. Regeneration commands are in the `/pa-mod-review refresh` section below
+  and `scenes-reference.md`.
 - Unreferenced-file detection cannot see inside `.papa` binaries, and scans the base game
   only in the tree surrounding each candidate rather than exhaustively. A file listed is a
   prompt to confirm, not proof it is dead.

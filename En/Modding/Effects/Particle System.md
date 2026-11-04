@@ -1,10 +1,12 @@
-# Particle system (.pfx) reference
+# Particle systems (.pfx)
 
-Transcribed from *Planetary Annihilation Particle System Guide* by Ben Golus (updated
-dom314, mikeyh). `.pfx` files are **JSON**.
+Particle effects are defined in JSON files with the `.pfx` extension. A file contains a
+system, one or more emitters, and a particle specification for each emitter. Emitters
+control where and when particles spawn; the particle specification controls how they look.
+This page describes the file format and the behavior of its main properties.
 
-Where the guide and the shipped base game disagree, the base game wins — see
-"Vocabulary is wider than the guide" at the end.
+The examples use JSON syntax. In particular, booleans must be unquoted: `false` is a
+boolean, while `"false"` is a non-empty string and is parsed as true by the engine.
 
 ## Structure
 
@@ -185,8 +187,8 @@ Common: `particle_add`, `particle_add_nohdr`, `particle_add_ramp`, `particle_add
 `particle_transparent`, `particle_transparent_nohdr`, `particle_transparent_ramp`,
 `particle_transparent_soft`, `particle_transparent_lit`, `particle_clip`.
 
-The authoritative list is `media/shaders/particle.json`, under `effects[].name` — 37 entries
-in the current build.
+The game's shader definitions are in `media/shaders/particle.json`, under
+`effects[].name`. The available list can change between game builds.
 
 | Blend word | Meaning |
 |---|---|
@@ -242,22 +244,15 @@ Final colour is `systemColor × emitterColor × particleColor`. The emitter colo
 `frameCurve` defaults to a single key of 0.0, so a flip book **never animates** unless you
 supply a curve going 0.0 → 1.0, or set `flipBookRandomStart`.
 
-## Vocabulary is wider than the guide
+## Keys used by the base game
 
-The guide's glossary is **not exhaustive**. The shipped base game uses keys it never
-documents — `sort` in 49 base-game `.pfx` files, `label` in 17, `temp_gravity` in 2 — and
-emitter types it never lists, notably **`TORUS`**.
+The tables above describe the documented format, but they do not include every key and
+emitter type used by the shipped game. For example, base-game effects use `sort`, `label`,
+`temp_gravity`, and the `TORUS` emitter type.
 
-`references/pfx-keys.json` therefore records every key, shader and enum value the base game
-actually uses, regenerated with:
+The [base-game vocabulary snapshot](../Review/references/pfx-keys.json) records keys, shader
+names, and enum values found in the shipped effects. The Review tool regenerates it after a
+game patch; its maintenance instructions are in [Review](../Review/SKILL.md).
 
-```
-node bin/generate-pfx-keys.mjs "<path to>\Planetary Annihilation Titans\media"
-```
-
-The accepted vocabulary is the guide's glossary **union** that snapshot.
-
-**Important:** spelling suggestions are drawn only from the *guide's documented* keys, never
-from the base-game snapshot. The base game contains its own typos — `emissionBurts` is a
-real key in a shipped `.pfx` — and suggesting one of those as a fix would be worse than
-saying nothing.
+The snapshot also contains misspellings present in shipped files. Do not assume that every
+key found in a base-game effect is intentional or suitable for new effects.

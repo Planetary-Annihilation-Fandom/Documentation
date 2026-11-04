@@ -329,6 +329,8 @@ Several headlights can be identified.
 
 #### Effects and sounds
 
+For the `.pfx` file format and particle properties, see [Particle systems](../../Effects/Particle%20System.md).
+
 ```json
 "events": {
     "fired": {
