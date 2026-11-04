@@ -12,6 +12,7 @@
 | User Interface | [Build Bar](Entities/User%20Interface/Build%20Bar.md), [Icons](Entities/User%20Interface/Icons.md) |
 | World | [Layers](Entities/World/Layers.md) |
 | Galactic War | [Basics](Galactic%20War%20Modding.md) |
+| Server scripting | [LAN PvP server scripts](Server%20Scripts/README.md) |
 
 ## Modding tools
 
