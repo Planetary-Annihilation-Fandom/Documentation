@@ -4,14 +4,13 @@ This page lists questions that the installed regular-match scripts and the launc
 
 | Capability | What is known | What would confirm it |
 |---|---|---|
-| Add a fixed amount of metal or energy during a live match | Regular scripts configure army `econ_rate`; no direct stockpile grant was found. | Identify a native `sim` method/property and exercise it in an isolated LAN match. |
-| Arbitrary persistent data written to host disk | Server scripts use `file.load`/`loadBlocking` for virtual game files; no write API was found. | Inspect native `file` bindings or run a contained write/read probe. |
-| Arbitrary host filesystem access | No Node.js `fs` use or equivalent visible API was found in shipped scripts. | Inspect native bindings and test path confinement in a disposable environment. |
-| Outbound network connections or custom sockets | Confirmed messaging uses game server/client APIs; no script socket API was found. | Inspect native exports or test a documented network binding. |
-| Launching operating-system processes | No `child_process` or visible process-launch API was found. | Inspect native bindings; do not infer access from the V8 runtime alone. |
+| Add a fixed amount of metal or energy during a live match | Regular scripts configure army `econ_rate`. The runtime dump of a live army shows no stockpile, income or storage member. | Look for hidden members in the native army binding (Frida/Ghidra, #25) or for a resource-granting unit or effect spec. |
+| Arbitrary persistent data written to host disk | The runtime `file` object has only `load`, `loadBlocking`, `mountMemoryFiles` and `unmountAllMemoryFiles`; none writes to disk. `server.writeReplay` writes replays only. | Inspect the native `file` and replay bindings for path handling. |
+| Arbitrary host filesystem access | `require('fs')` returns `undefined`, and no exposed object offers file access outside the virtual file system. Whether `file.load` accepts host paths was not tested. | Test `file.load` path confinement in a disposable environment. |
+| Outbound network connections or custom sockets | No socket or HTTP object is exposed, and `require` does not resolve `net`, `http`, `https` or `dgram`. | Inspect native bindings for hidden members (#25). |
+| Launching operating-system processes | No process API is exposed, and `require('child_process')` returns `undefined`. | Inspect native bindings for hidden members (#25). |
 | Lifetime and reconnect semantics of custom `server.setGameConfig` fields | The match config is serialized and restored by stock save/load code. Exact survival of arbitrary custom fields through every lobby, save, replay, and reconnect path was not tested. | Add a disposable custom field and verify each lifecycle path. |
 | Full V8 debugger attach in the current build | The executable accepts `--debug-port`, but a headless launch did not open an attachable listener on the requested port. | Check the exact required launch mode/protocol or inspect the native debugger setup. |
-| Custom `--scripturl` end-to-end loading | The option is listed by server help; a custom probe was not completed. | Serve a minimal harmless script and confirm load logs and state behavior in an isolated server. |
 
 ## Safe investigation order
 

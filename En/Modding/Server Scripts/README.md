@@ -11,6 +11,7 @@ The installed game build examined for this guide is `1.0.0.0.20261016195339` (`1
 | Script runtime, built-in modules, and process boundaries | [Runtime and boundaries](Runtime%20and%20boundaries.md) |
 | LAN lobby, simulation, units, and economy | [LAN match and simulation](LAN%20match%20and%20simulation.md) |
 | Client messages, per-player state, and match data | [Client messaging and match state](Client%20messaging%20and%20match%20state.md) |
+| Objects and functions observed in a running server | [Runtime API surface](Runtime%20API%20surface.md) |
 | Findings that still need a controlled experiment | [Unverified capabilities](Unverified%20capabilities.md) |
 
 ## How to read the findings
