@@ -5,16 +5,17 @@
 | Topic | Pages |
 |---|---|
 | Common | [Fetch Syntax](Entities/Fetch%20Syntax.md), [Unit Lists](Entities/Unit%20List.md), [Unit type tags](Entities/Used%20UnitTypes.md) |
-| Units | [Properties](Entities/Units/Basics.md), [Audio](Entities/Units/Audio.md), [Navigation](Entities/Units/Navigation.md), [Recon](Entities/Units/Recon.md), [Tools](Entities/Units/Tools.md), [Animation](Entities/Units/Animation.md) |
+| Units | [Properties](Entities/Units/Basics.md), [Audio](Entities/Units/Audio.md), [Navigation](Entities/Units/Navigation.md), [Recon](Entities/Units/Recon.md), [Tools](Entities/Units/Tools.md), [Animation](Entities/Units/Animation.md), [Schemas](Entities/Units/Schemas/README.md) |
 | Buildings | [Properties](Entities/Buildings/Basics.md), [Factory](Entities/Buildings/Factories.md) |
-| Weapons and Tools | [Properties](Entities/Weapons%20and%20Tools/Basics.md) |
+| Weapons and Tools | [Properties](Entities/Weapons%20and%20Tools/Basics.md), [Schemas](Entities/Weapons%20and%20Tools/Schemas/README.md) |
 | User Interface | [Build Bar](Entities/User%20Interface/Build%20Bar.md), [Icons](Entities/User%20Interface/Icons.md) |
 | World | [Layers](Entities/World/Layers.md) |
 | Galactic War | [Basics](Galactic%20War%20Modding.md) |
 
-## Debugging
+## Modding tools
 
-[Debug guide](Debug/README.md) covers attaching to the game over CDP, navigating scenes, testing Galactic War and battles, and inspecting engine behavior.
+- [Debug guide](Debug/README.md) covers attaching to the game over CDP, navigating scenes, testing Galactic War and battles, and inspecting engine behavior.
+- [Review skill](Review/SKILL.md) describes the local mod review workflow and its reference material.
 
 ## Software
 
