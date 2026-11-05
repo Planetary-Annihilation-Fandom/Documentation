@@ -73,9 +73,10 @@ Rules that cost time when ignored:
 $cdb   = '<path to>\cdb.exe'
 $trace = '<short path>\tools\ttd\runs\lobby-2c\server01.run'
 $sym   = '<short path>\bins\14190493\bin_x64'
+$query = '<short path>\tools\ttd\queries\ttd14-v8-summary.txt'
 
 # non-seeking queries from a file
-& $cdb -z $trace -y $sym -c '$$><<short path>\tools\ttd\queries\ttd14-v8-summary.txt;q'
+& $cdb -z $trace -y $sym -c "`$`$><$query;q"
 
 # seeking commands inline
 & $cdb -z $trace -y $sym -c '!tt 0;bp server+0x53c010;g;!tt;r r8;da @r8;q'
