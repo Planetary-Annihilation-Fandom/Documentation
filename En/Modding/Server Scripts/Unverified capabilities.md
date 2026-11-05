@@ -27,7 +27,7 @@ This page separates tested behavior from questions that still lack a confirmed c
 | Add a new native V8 binding | An ordinary server mod cannot do it: mods only replace files under `/server-script/`, while native functions are registered by the executable. The registration code and `v8::FunctionTemplate::New` are located for this build, so a binding can be added to a patched home build of `server.exe`. | Both: runtime mounting behavior and static/runtime binding trace | Add a test binding to a patched build and call it from a script ([issue #32](https://github.com/Planetary-Annihilation-Fandom/Documentation/issues/32)). |
 | Use the experimental Node file-and-log bridge | In lobby and AI benchmark runs, Node watched the server log, handled requests, and wrote JSON responses that the script read with `file.load`. The helper read an outside file and made a loopback HTTP GET. Ordinary round trips took 133–175 ms; a 1 MiB payload was read successfully. | Runtime | Test other workloads and failure cases if they matter to a particular local setup. |
 
-For the methods whose native callbacks were traced, build-specific evidence and addresses are in [Reverse engineering native bindings](Reverse%20engineering%20native%20bindings.md). Eleven of twelve examined names matched between Ghidra and Frida; `server.broadcast` remains unresolved.
+For the methods whose native callbacks were traced, build-specific evidence and addresses are in [Reverse engineering native bindings](Reverse%20engineering%20native%20bindings.md). Eleven of twelve examined names matched between Ghidra and Frida; the twelfth, `server.broadcast`, is a script function from `server_utils.js`, not a native binding.
 
 ## Safe investigation order
 

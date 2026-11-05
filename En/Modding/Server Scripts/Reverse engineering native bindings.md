@@ -22,7 +22,7 @@ The executable is PE32+ x86-64. It has no V8 DLL import or neighboring PDB, but 
 
 RVA means offset from the loaded `server.exe` base. These values apply only to build `20261016195339`; do not carry them over to another build without repeating the checks.
 
-`server.broadcast` appeared in a runtime object dump but could not be matched to a native callback. Its name string had no cross-reference in the two inspected registration functions. Its callback remains unknown.
+`server.broadcast` appeared in a runtime object dump but is not a native binding: `server_utils.js` defines it as a script function, and the PDB of build 14190493 has no native callback for it.
 
 ## Checked call behavior
 
@@ -39,7 +39,7 @@ Three diagnostic calls to `server.getGameConfig()` used zero arguments and each 
 5. Compare the callback found at each static registration call with the address recorded at runtime. Record unresolved names separately rather than assigning a callback by proximity.
 6. For argument behavior, inspect the callback's checks and then observe a controlled stock or diagnostic call in a live server. Keep static findings separate from runtime observations.
 
-Frida found no usable V8 symbols in the executable, so the static string references were needed to locate the registration wrapper. The check covered 12 named bindings: 11 matched in both methods and `server.broadcast` remained unresolved. A custom binding for a patched home build is tracked in [issue #32](https://github.com/Planetary-Annihilation-Fandom/Documentation/issues/32).
+Frida found no usable V8 symbols in the executable, so the static string references were needed to locate the registration wrapper. The check covered 12 names: 11 native bindings matched in both methods, and `server.broadcast` turned out to be a script function from `server_utils.js`. A custom binding for a patched home build is tracked in [issue #32](https://github.com/Planetary-Annihilation-Fandom/Documentation/issues/32).
 
 ## Related pages
 

@@ -7,7 +7,7 @@ Build: `20261016195339`. The dump was taken in two states:
 - **Lobby**: before any match exists. Collections such as `sim.units` are empty.
 - **Match**: an AI-only match started with `--state benchmark`, once units exist. No human players were connected, so `sim.players` and `server.clients` were empty.
 
-The native binding investigation also traced 11 named callbacks between Ghidra and Frida on this build. Their callback RVAs and evidence are listed in [Reverse engineering native bindings](Reverse%20engineering%20native%20bindings.md). `server.broadcast` remains unresolved.
+The native binding investigation also traced 11 named callbacks between Ghidra and Frida on this build. Their callback RVAs and evidence are listed in [Reverse engineering native bindings](Reverse%20engineering%20native%20bindings.md). `server.broadcast` is not among them: it is a script function from `server_utils.js`.
 
 ## How the dump was made
 
