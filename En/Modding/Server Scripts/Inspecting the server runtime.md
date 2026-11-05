@@ -2,6 +2,8 @@
 
 This guide shows how to run your own code inside a local `server.exe` and list what the engine exposes to server scripts. The results for build `20261016195339` are in [Runtime API surface](Runtime%20API%20surface.md). The complete dump scripts and raw dumps are attached to [issue #24](https://github.com/Planetary-Annihilation-Fandom/Documentation/issues/24).
 
+To trace a native method beyond the JavaScript object dump, see [Reverse engineering native bindings](Reverse%20engineering%20native%20bindings.md). That investigation combines Ghidra cross-references with Frida observations and records the build-specific scope of its addresses.
+
 Use a disposable output directory. The game installation is not modified.
 
 ## 1. Load your own scripts with `--scripturl`
@@ -28,7 +30,7 @@ cd "<game>/bin_x64"
 ./server.exe --headless --no-players --disable-replays --port 20557 --output-dir "C:\pa-probe\out" --scripturl "C:\pa-probe\script\\"
 ```
 
-`console.log` output goes to stdout and to the log file in `--output-dir`. Prefix your lines so they are easy to filter out of the engine's own messages.
+Declare `console` with `require('console')` as above: the global `console` in server scripts does not write to the server log. `require('console').log` output goes to stdout and to the log file in `--output-dir`. Prefix your lines so they are easy to filter out of the engine's own messages.
 
 ## 2. Choose the server state
 

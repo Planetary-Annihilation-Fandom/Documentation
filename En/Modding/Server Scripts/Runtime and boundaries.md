@@ -8,6 +8,8 @@ The runtime exposes game modules such as `server`, `sim`, `file`, and `env`. Shi
 
 The executable's help lists a `--scripturl` option for a server script source and a `--debug-port` option. `--scripturl` takes a local directory and mounts it over `/server-script/`, so its files replace shipped files of the same name; see [Runtime API surface](Runtime%20API%20surface.md#how-the-dump-was-made). The game client has separate UI/script debugging switches; do not confuse those with server-side debugging.
 
+The native executable embeds V8 statically in build `20261016195339`; no separate V8 DLL or V8 imports were found, while V8 API strings and RTTI are present in the PE. Eleven named `server.*` and `sim.*` callbacks were matched between static Ghidra call sites and runtime Frida observations. See [Reverse engineering native bindings](Reverse%20engineering%20native%20bindings.md).
+
 ## Available game-facing APIs
 
 | Module or API | Confirmed role | Source examples |
@@ -26,6 +28,8 @@ For example, `server_utils.js` implements `server.broadcast` by iterating connec
 The shipped scripts examined here do not use Node.js `fs`, `child_process`, browser `window`/DOM APIs, or Coherent UI APIs. The `file` module calls seen in server code load game virtual files; they do not establish arbitrary host filesystem access. This is evidence about the visible script surface, not proof that every native binding is unavailable.
 
 No supported arbitrary socket API or operating-system process API was found in the shipped scripts or in the objects exposed to a running server, and `require` does not resolve Node.js module names such as `fs`, `net` or `child_process`. Server/client communication in the confirmed examples goes through the game's `server` and `client.message` APIs. Treat OS access, external network calls, and persistent arbitrary file writes as unavailable until a native API or a controlled runtime experiment proves otherwise.
+
+A separate helper process can perform host-side work through an experimental file-and-log bridge: a server script writes a request to the server log, Node.js watches that log, and the script reads the helper's response with `file.load`. This completed in both lobby and AI benchmark runs on build `20261016195339`, including a helper reading a file outside the game directory and making a loopback HTTP GET. Ordinary measured round trips took 133–175 ms, and a 1 MiB payload was read successfully. See [Unverified capabilities](Unverified%20capabilities.md).
 
 ## Inspecting the executable
 

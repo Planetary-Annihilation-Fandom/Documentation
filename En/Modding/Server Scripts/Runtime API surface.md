@@ -7,6 +7,8 @@ Build: `20261016195339`. The dump was taken in two states:
 - **Lobby**: before any match exists. Collections such as `sim.units` are empty.
 - **Match**: an AI-only match started with `--state benchmark`, once units exist. No human players were connected, so `sim.players` and `server.clients` were empty.
 
+The native binding investigation also traced 11 named callbacks between Ghidra and Frida on this build. Their callback RVAs and evidence are listed in [Reverse engineering native bindings](Reverse%20engineering%20native%20bindings.md). `server.broadcast` remains unresolved.
+
 ## How the dump was made
 
 A script mounted over `/server-script/` with `--scripturl` walks every object reachable from the global object with `Object.getOwnPropertyNames`, which also returns non-enumerable properties. It logs each property's path, type and descriptor flags to the server log. The game installation is not modified: only files with the same name are replaced, and the other shipped modules load as usual.
@@ -61,6 +63,8 @@ Native members present in both states:
 | Networking status | `steam_id`, `steam_networking_enabled`, `uPNPStatus` |
 
 The shipped scripts, mainly `server_utils.js`, add more members at startup, so these appear only in the match dump: `broadcast`, `broadcastEventMessage`, `broadcastCountdownEvent`, `respond`, `rejectClient`, `setHandlers`, `handlers`, `connected`, `close`, `closed`, `getModsForBeacon`, `getModsPayload`, `uuid`, and the community-server beacon functions.
+
+For two native methods, argument handling was checked directly on build `20261016195339`: the stock `main.js` called `server.setGameState` with one argument, and three diagnostic calls to `server.getGameConfig()` used zero arguments and returned JavaScript objects. Static inspection found that `setGameState` requires at least one argument before reading argument 0; `getGameConfig` reads the current configuration without checking the argument count.
 
 Client objects were not observed. The shipped scripts use `id`, `name`, `uberid`, `connected`, `data`, `message`, `kill`, `onDisconnect`, `setVisionBits`, `setControlBits`, `giveFullVision`, `incrementStatistic`, `validateItem` and `downloadModsFromServer`.
 

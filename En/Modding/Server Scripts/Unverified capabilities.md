@@ -1,22 +1,26 @@
 # Unverified capabilities
 
-This page lists questions that the installed regular-match scripts and the launch experiments did not answer. “Unverified” does not mean impossible; it means a custom server script has not yet been shown to have a supported contract for it.
+This page separates tested behavior from questions that still lack a confirmed contract. Findings marked **Runtime** come from a running server, **Static** from shipped scripts or native-code inspection, and **Both** from both methods. Runtime and native-binding observations refer to build `20261016195339` unless stated otherwise.
 
-| Capability | What is known | What would confirm it |
-|---|---|---|
-| Add a fixed amount of metal or energy during a live match | Regular scripts configure army `econ_rate`. The runtime dump of a live army shows no stockpile, income or storage member. | Look for hidden members in the native army binding (Frida/Ghidra, #25) or for a resource-granting unit or effect spec. |
-| Arbitrary persistent data written to host disk | The runtime `file` object has only `load`, `loadBlocking`, `mountMemoryFiles` and `unmountAllMemoryFiles`; none writes to disk. `server.writeReplay` writes replays only. | Inspect the native `file` and replay bindings for path handling. |
-| Arbitrary host filesystem access | `require('fs')` returns `undefined`, and no exposed object offers file access outside the virtual file system. Whether `file.load` accepts host paths was not tested. | Test `file.load` path confinement in a disposable environment. |
-| Outbound network connections or custom sockets | No socket or HTTP object is exposed, and `require` does not resolve `net`, `http`, `https` or `dgram`. | Inspect native bindings for hidden members (#25). |
-| Launching operating-system processes | No process API is exposed, and `require('child_process')` returns `undefined`. | Inspect native bindings for hidden members (#25). |
-| Lifetime and reconnect semantics of custom `server.setGameConfig` fields | The match config is serialized and restored by stock save/load code. Exact survival of arbitrary custom fields through every lobby, save, replay, and reconnect path was not tested. | Add a disposable custom field and verify each lifecycle path. |
-| Full V8 debugger attach in the current build | The executable accepts `--debug-port`, but a headless launch did not open an attachable listener on the requested port. | Check the exact required launch mode/protocol or inspect the native debugger setup. |
+| Capability | What is known | Confirmation | What would answer the remaining question |
+|---|---|---|---|
+| Add a fixed amount of metal or energy during a live match | Regular scripts configure an army's `econ_rate`. A live army dump showed no stockpile, income, or storage member. No direct stockpile-credit operation was found in the regular-match scripts. | Both: stock code inspection and runtime object dump | Test a native operation or a resource-granting unit/effect in a controlled match. |
+| Write arbitrary persistent data to host disk | The runtime `file` object exposes `load`, `loadBlocking`, `mountMemoryFiles`, and `unmountAllMemoryFiles`; it has no observed write method. `server.writeReplay` is present, but is a replay operation. | Runtime inventory; static stock-script inspection | Inspect path handling in native file and replay callbacks, then test an isolated path. |
+| Access arbitrary host files from the server script | `require('fs')` returns `undefined`. A separate Node helper read a file outside the game directory and returned its contents to the script through a file mounted in the game's virtual filesystem. This verifies helper-mediated access, not direct host-path access by `file.load`. | Both: runtime module probe and runtime bridge experiment | Test `file.load` path confinement in a disposable environment. |
+| Make outbound network connections or open custom sockets from the script | No socket or HTTP object appeared in the runtime dump, and `require` did not resolve `net`, `http`, `https`, or `dgram`. A separate Node helper successfully made a loopback HTTP GET and returned the response through the file-and-log bridge. | Runtime | Test direct server-script network access only if a native candidate is found. |
+| Launch operating-system processes from the script | No process API appeared in the runtime dump, and `require('child_process')` returned `undefined`. | Runtime | Inspect any suspected native binding and test it in an isolated server process. |
+| Preserve arbitrary custom `server.setGameConfig` fields through every lifecycle path | Stock save/load code serializes and restores game configuration, but survival of arbitrary custom fields through lobby, save, replay, and reconnect paths was not checked end to end. | Static for stock serialization; custom-field behavior unverified | Add a disposable field and inspect it after each lifecycle transition. |
+| Attach a V8 debugger in the current build | `--debug-port` and `--waitForDebugger` did not produce an attachable listener in the observed headless launch. Native registration inspection found V8 API code embedded in the executable, but did not test another debugger launch mode. | Runtime for the tested launch; Static for embedded V8 | Identify a supported launch mode and verify an actual debugger connection. |
+| Add a new native V8 binding | An ordinary server mod cannot do it: mods only replace files under `/server-script/`, while native functions are registered by the executable. The registration code and `v8::FunctionTemplate::New` are located for this build, so a binding can be added to a patched home build of `server.exe`. | Both: runtime mounting behavior and static/runtime binding trace | Add a test binding to a patched build and call it from a script ([issue #32](https://github.com/Planetary-Annihilation-Fandom/Documentation/issues/32)). |
+| Use the experimental Node file-and-log bridge | In lobby and AI benchmark runs, Node watched the server log, handled requests, and wrote JSON responses that the script read with `file.load`. The helper read an outside file and made a loopback HTTP GET. Ordinary round trips took 133–175 ms; a 1 MiB payload was read successfully. | Runtime | Test other workloads and failure cases if they matter to a particular local setup. |
+
+For the methods whose native callbacks were traced, build-specific evidence and addresses are in [Reverse engineering native bindings](Reverse%20engineering%20native%20bindings.md). Eleven of twelve examined names matched between Ghidra and Frida; `server.broadcast` remains unresolved.
 
 ## Safe investigation order
 
-1. Read the matching stock script and enumerate its native module calls.
-2. Inspect `server.exe` metadata, imports, strings, and symbols.
-3. Use a native decompiler such as Ghidra to locate V8 bindings and trace the methods exposed to scripts.
-4. Validate a suspected method with a small, isolated LAN server and disposable user-data/output directories.
+1. Read the matching stock script and list the native module calls it uses.
+2. Record the exact executable build and inspect its PE metadata, imports, strings, and available symbols.
+3. Use Ghidra cross-references to locate candidate registration paths, then compare them with observations from a live server using Frida.
+4. Check suspected behavior with a small, isolated LAN server and disposable output directories.
 
-Static decompilation can reveal code paths but cannot prove their runtime preconditions or safety. A controlled in-game experiment is still needed for the items above.
+Static decompilation identifies code paths but does not prove runtime preconditions. A controlled experiment is needed for behavior the scripts do not exercise.
