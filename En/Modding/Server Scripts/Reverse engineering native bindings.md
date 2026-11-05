@@ -45,4 +45,5 @@ Frida found no usable V8 symbols in the executable, so the static string referen
 
 - [Runtime API surface](Runtime%20API%20surface.md) lists script-visible objects and describes the live object dumps.
 - [Inspecting the server runtime](Inspecting%20the%20server%20runtime.md) explains how to run probes inside the server.
+- [Recording the server with TTD](Recording%20the%20server%20with%20TTD.md) records a run once and queries calls and memory afterwards.
 - [Unverified capabilities](Unverified%20capabilities.md) separates tested capabilities from unanswered questions.

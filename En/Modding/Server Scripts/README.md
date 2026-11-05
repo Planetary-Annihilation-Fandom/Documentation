@@ -14,6 +14,7 @@ The installed game build examined for this guide is `1.0.0.0.20261016195339` (`1
 | Objects and functions observed in a running server | [Runtime API surface](Runtime%20API%20surface.md) |
 | Running your own probe inside `server.exe` | [Inspecting the server runtime](Inspecting%20the%20server%20runtime.md) |
 | Tracing native V8 bindings in `server.exe` | [Reverse engineering native bindings](Reverse%20engineering%20native%20bindings.md) |
+| Recording a run with Time Travel Debugging and querying it | [Recording the server with TTD](Recording%20the%20server%20with%20TTD.md) |
 | Findings that still need a controlled experiment | [Unverified capabilities](Unverified%20capabilities.md) |
 
 ## How to read the findings

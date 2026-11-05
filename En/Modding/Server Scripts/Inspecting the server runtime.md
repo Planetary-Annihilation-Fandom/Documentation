@@ -4,6 +4,8 @@ This guide shows how to run your own code inside a local `server.exe` and list w
 
 To trace a native method beyond the JavaScript object dump, see [Reverse engineering native bindings](Reverse%20engineering%20native%20bindings.md). That investigation combines Ghidra cross-references with Frida observations and records the build-specific scope of its addresses.
 
+To record a whole run and query calls afterwards instead of probing live, see [Recording the server with TTD](Recording%20the%20server%20with%20TTD.md).
+
 Use a disposable output directory. The game installation is not modified.
 
 ## 1. Load your own scripts with `--scripturl`
