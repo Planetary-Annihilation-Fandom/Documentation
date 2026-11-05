@@ -47,7 +47,7 @@ Everything else on the global object is standard JavaScript: `Object`, `JSON`, `
 
 `require` returns `undefined` for a name that does not exist; it does not throw. None of these names resolve: `fs`, `net`, `http`, `https`, `os`, `process`, `child_process`, `path`, `timers`, `util`, `crypto`, `socket`, `dgram`, `buffer`, `events`, `stream`, `url`, `zlib`. There is no Node.js runtime.
 
-Modules run in a second context. Its global object is reachable as `global` from `main.js`, and it is shared by all modules: a top-level `var` in one module becomes a global property visible to every other module. Wrap module code in a function to keep helper variables private.
+Runtime probes found that `main.js` and required modules execute with separate global objects. Within each tested file, `this === global`; `module` and `exports` exist and `exports === module.exports`, while top-level `arguments`, `__filename`, and `__dirname` are undefined. A property written to `global` by `main.js` was not visible in a required module, and a property written by one required module was not visible in another. This module system does not use Node's five-argument CommonJS wrapper. Keep module-local state in the module's own scope; do not rely on globals shared across files.
 
 ## `server`
 
