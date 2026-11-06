@@ -1,6 +1,6 @@
 # Native server architecture
 
-This map describes the Windows PDB build `14190493`. Function and class names come from the server PDB and the existing Ghidra analysis; they are useful navigation anchors, not a complete runtime/threading contract. Build-specific addresses are maintained in `analyze server/symbols/symbols.tsv` in pa-research-data.
+This map describes the Windows PDB build `14190493`. Function and class names come from the server PDB and the existing Ghidra analysis; they are useful navigation anchors, not a complete runtime/threading contract. Build-specific addresses are maintained in the [symbol table](server-symbols.tsv).
 
 ## Main loop and simulation
 
@@ -44,6 +44,6 @@ The current installed build has no neighboring PDB. A transferred name is an ana
 
 The completed Version Tracking export contained 973,677 correlator records but only 21,729 unique accepted exact-function pairs at confidence at least 10.000. Duplicate-instruction matches and `AVAILABLE`/`BLOCKED` records are not confirmed mappings. A selected set of 27 exact-function matches supplied 20 new addresses and seven existing ones; the limited apply completed without errors.
 
-Use a separate project copy when the shared service holds the original project open. Export a completed VT session in a later headless process using an independent host program (`vt-export-host.bin`); opening the source/destination program as the export host can cause domain-object locking. Short DOS paths and an isolated Ghidra profile avoid the observed Unicode-path problems. Consult `symbols/README.md` and the tools' maintained Ghidra instructions for commands; preserve the selected TSV and original VT evidence when removing narrative reports.
+Use a separate project copy when the shared service holds the original project open. Export a completed VT session in a later headless process using an independent host program (`vt-export-host.bin`); opening the source/destination program as the export host can cause domain-object locking. Short DOS paths and an isolated Ghidra profile avoid the observed Unicode-path problems. Consult the maintained Ghidra tool instructions for commands; record confirmed mappings in the symbol table and discard reproducible raw exports after extracting the findings.
 
 Neither an exact-function confidence score nor matching public V8 names establishes semantic equivalence of whole builds or the runtime's exact V8 minor version.

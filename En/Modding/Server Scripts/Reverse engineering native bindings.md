@@ -43,7 +43,7 @@ Frida found no usable V8 symbols in the executable, so the static string referen
 
 ## Shared tracing library
 
-In pa-research-data, `analyze server/lib/frida_run.py` starts the selected build suspended through the headless launcher, attaches Frida 16.7.19, injects the symbol table and `v8.js`, then resumes. Use its `--build 14190493` or `--build current` switch to select the matching address set; it writes a fresh labelled run with server output, Frida messages and metadata.
+The shared Frida runner starts the selected build suspended through the headless launcher, attaches Frida 16.7.19, injects the symbol table and `v8.js`, then resumes. Use its `--build 14190493` or `--build current` switch to select the matching address set; it writes a fresh labelled run with server output, Frida messages and metadata.
 
 ```javascript
 // Agent example for the shared V8 library.
@@ -52,7 +52,7 @@ V8.hookCallback('server.setGameState', function (info) {
 });
 ```
 
-Addresses come from `symbols/symbols.tsv`, with `DebugSymbol.fromName` as a fallback on the PDB build. The check-bindings example observed all 11 registrations on both builds and read `config` from the stock state-change callback. The string create/read round trip was verified on `14190493` only. The current-build `SetCallHandler` hook remains unverified, and the `14190493` UTF-8 argument helper does not free its small result buffer; repeated long-running use needs that lifetime issue resolved.
+Addresses come from the [symbol table](server-symbols.tsv), with `DebugSymbol.fromName` as a fallback on the PDB build. The check-bindings example observed all 11 registrations on both builds and read `config` from the stock state-change callback. The string create/read round trip was verified on `14190493` only. The current-build `SetCallHandler` hook remains unverified, and the `14190493` UTF-8 argument helper does not free its small result buffer; repeated long-running use needs that lifetime issue resolved.
 
 The current-build UTF-8 helper has a different signature from the PDB build's helper, so the shared library selects it by build. Older standalone agents still contain their own address/ABI copies; a successful run of the shared example does not validate those copies.
 

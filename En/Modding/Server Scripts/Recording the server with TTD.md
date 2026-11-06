@@ -73,7 +73,7 @@ Rules that cost time when ignored:
 $cdb   = '<path to>\cdb.exe'
 $trace = '<short path>\tools\ttd\runs\lobby-2c\server01.run'
 $sym   = '<short path>\bins\14190493\bin_x64'
-$query = '<short path>\tools\ttd\queries\ttd14-v8-summary.txt'
+$query = '<short path>\tools\ttd\scripts\v8-summary.txt'
 
 # non-seeking queries from a file
 & $cdb -z $trace -y $sym -c "`$`$><$query;q"
@@ -98,7 +98,7 @@ Take the argument registers from the PDB signature, not from the source-level pa
 
 ## Example: V8 calls in a lobby trace
 
-Trace `lobby-2c`: build 14190493, 40 s, 228 MiB, recorded with the scripts above.
+A 40-second lobby recording of build 14190493 (228 MiB) produced the following observations. The original trace is disposable; use the procedure above to record a new run.
 
 | Function | RVA | Calls |
 |---|---|---:|
@@ -117,7 +117,7 @@ These RVAs are valid for build 14190493 only. For the shipped build `20261016195
 
 - Keep game code out of notes: record RVAs, names, counts and thread facts, not decompiled bodies.
 - A trace that lacks initialisation was almost certainly resumed too early; check `ttd-out.txt` for `Recording has started`.
-- Traces and indexes are large (the index is 1 to 2 times the trace). Nothing deletes old runs automatically.
+- Traces and indexes are large (the index is 1 to 2 times the trace). Extract reusable findings into documentation, then discard recordings and indexes that are no longer needed.
 
 ## Related pages
 

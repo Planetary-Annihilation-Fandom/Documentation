@@ -38,31 +38,21 @@ For example, the prototype's ping can be consumed with `JSON.parse(native.ping()
 
 ## Build and run
 
-In a checkout of [pa-research-data](https://github.com/Planetary-Annihilation-Fandom/pa-research-data), the implementation is under `analyze server/native-binding`, with shared V8 wrappers in `analyze server/lib/v8.js` and addresses in `analyze server/symbols/symbols.tsv`. From that checkout's root:
+The native API project provides a Frida runner and a DLL runner. With the selected build and Frida 16.7.19 available, run `run_native_api.py lobby` or `run_native_api.py match` from the project using the Frida Python environment; both inject the common V8 wrappers and the [symbol table](server-symbols.tsv).
 
-```powershell
-# Frida 16.7.19: lobby or match (AI benchmark).
-& 'tools/ReverseEngineering/frida16-venv/Scripts/python.exe' 'analyze server/native-binding/run_native_api.py' lobby
-& 'tools/ReverseEngineering/frida16-venv/Scripts/python.exe' 'analyze server/native-binding/run_native_api.py' match
-
-# DLL: Visual Studio 2022 Build Tools; argument is poll timer delay in ms.
-cmd /c '"analyze server\native-binding\dll\build.cmd"'
-python 'analyze server/native-binding/dll/run_native_dll.py' 5
-```
-
-The runners create fresh output directories and launch copied servers through `tools/headless-server/run_server.py`; the installed executable and `bins/14190493` are inputs. Consult the implementation README for port selection before a concurrent run.
+For the DLL variant, run `dll/build.cmd` with Visual Studio Build Tools available, then `python dll/run_native_dll.py 5`; the argument is the poll timer delay in milliseconds. The runners use the timeout launcher and treat the selected game build as read-only input; consult the project's short README for current commands and port allocation.
 
 ## Evidence and measurement limits
 
-The following run identifiers are relative to `analyze server/runs/` in pa-research-data. They identify the local evidence checked for this reference on 2026-11-06; retain the underlying evidence independently of old task reports.
+These results were extracted from the local checks performed on 2026-11-05. The original one-off logs and run directories are not part of the reference; repeat the relevant scenario to obtain fresh measurements.
 
-| Evidence | Established result |
+| Scenario | Established result |
 |---|---|
-| `native-api-lobby-20261105-210516` | Files, TCP echo, HTTP GET/POST and reply polling passed; exit 0. |
-| `native-api-match-20261105-210120` and `native-api-match-20261105-214349` | The same checks passed after reaching `valgrind_playing` with units; exit 0. |
-| `native-dll-lobby-20261105-214236` | DLL file/TCP/HTTP checks passed; `setTimeout(5)` produced a 31 ms mean poll interval, 32 ms TCP and combined cycles. |
-| `native-dll-lobby-20261105-214318` | DLL checks passed; `setTimeout(0)` produced a 0.13 ms mean poll interval, 2 ms TCP and 32 ms combined cycle. |
-| `native-api-lobby-20261105-215244` | `send/get/post` together took 3,889 ms; polling began immediately afterwards. The worker's TCP exchange took 1.956 ms. |
+| Frida lobby | Files, TCP echo, HTTP GET/POST and reply polling passed; exit 0. |
+| Frida AI benchmark | The same checks passed after reaching `valgrind_playing` with units; exit 0. |
+| DLL lobby, `setTimeout(5)` | File/TCP/HTTP checks passed; mean poll interval 31 ms, TCP and combined cycles 32 ms. |
+| DLL lobby, `setTimeout(0)` | Checks passed; mean poll interval 0.13 ms, TCP 2 ms, combined cycle 32 ms. |
+| Frida synchronous dispatch diagnostic | `send/get/post` together took 3,889 ms; polling began immediately afterwards. The worker's TCP exchange took 1.956 ms. |
 
 The last diagnostic localizes the multi-second Frida delay to synchronous callback-to-host dispatch in this setup, rather than to the later poll timer. It does not divide the cost among Frida's internal operations. These short runs are not a general throughput benchmark, and timings from the file/log, Frida and DLL paths measure different work.
 

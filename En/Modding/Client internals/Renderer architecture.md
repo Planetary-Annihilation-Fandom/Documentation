@@ -26,7 +26,7 @@ The PE imports 29 OpenGL 1.1 entry points from `OPENGL32.dll`. Cross-references 
 - `GLTexture`: `bindTexture` (`0x4690C0`), `updateBits` (`0x468940`, `0x468D60`), `applyTextureWrap` (`0x4695F0`), `generateMips` (`0x469540`), scalar destructor (`0x467DB0`). `GLTextureBuffer`: `init` (`0x45E960`), `orphan` (`0x45EE20`), destructor (`0x45E880`); `GLTextureBufferNoMap::init` (`0x45EF30`) and deleting destructor (`0x406910`); `GLTextureBufferCoherentBinding::init` (`0x45F2F0`), `orphan` (`0x45F450`) and deleting destructor (`0x406960`).
 - `GLRenderTarget`: `createBuffer` (`0x465FE0`), `downloadTextureData` (`0x466500`), `copy` (`0x466720`, `0x466880`), `prepareAsyncDownload` (`0x466CD0`), `applyViewport` (`0x466C00`).
 
-`crom::ras::GLExtFunctions::GLExtFunctions` (`0x469860`) resolves 88 additional entry-point names through imported `SDL_GL_GetProcAddress`. The resolved set covers shaders/programs and uniforms, buffers and vertex input, texture extensions, framebuffers/renderbuffers, instancing, sync, and debug output. The dynamically resolved groups cover the 88 functions listed in the source GL inventory, `analyze client/gl-string-candidates.txt` in pa-research-data. Decompilation of the functions that invoke the resolved pointer fields identifies these additional callers:
+`crom::ras::GLExtFunctions::GLExtFunctions` (`0x469860`) resolves 88 additional entry-point names through imported `SDL_GL_GetProcAddress`. The resolved set covers shaders/programs and uniforms, buffers and vertex input, texture extensions, framebuffers/renderbuffers, instancing, sync, and debug output. The PE inspector regenerates candidate GL strings; correlate that list with imports and resolver call sites to identify the dynamically resolved names. Decompilation of the functions that invoke the resolved pointer fields identifies these additional callers:
 
 - `GLRasterizer`: `GLPresenter::present` (`0x406CC0`), `setRenderTarget` (`0x407D90`), `init` (`0x408670`), `resize` (`0x40A370`), `createRenderTarget` (`0x40B790`), `applyTextureChannel` (`0x40B9A0`), `drawPrimitive` (`0x40C5F0`), `drawIndexedBatch` (`0x40C6E0`), `drawBatch` (`0x40C890`), `addFence` (`0x40DA50`), `relink` (`0x40DAD0`), `pushDebugGroup` (`0x40DF90`), `popDebugGroup` (`0x40DFC0`).
 - `GLTextureBuffer`: destructor (`0x45E880`), `init` (`0x45E960`), `resize` (`0x45EA60`), `map` (`0x45EB10`), `mapRange` (`0x45EBB0`), `unmap` (`0x45EC50`), `orphan` (`0x45EE20`). `GLIndexBuffer`: deleting destructor (`0x4611A0`), `bindBuffer` (`0x461470`). `GLVertexBuffer`: deleting destructor (`0x461570`), `map` (`0x461840`), `mapRange` (`0x4618E0`), `updateRange` (`0x461990`), `unmap` (`0x461A40`), `bindBuffer` (`0x461A90`).
@@ -65,14 +65,9 @@ SDL event, mouse, keyboard and text-input imports coexist with Coherent input ty
 
 ## Reproducing the static inventory
 
-In pa-research-data, `analyze client/export-pdb-symbols.py` uses Windows DbgHelp (`SymEnumSymbolsW` and `SymEnumTypesW`) with the binary's directory as the PDB search path. Run it from the checkout root with Python x64:
+The PDB exporter uses Windows DbgHelp (`SymEnumSymbolsW` and `SymEnumTypesW`) with the binary's directory as the PDB search path. With Python x64, pass the selected executable and temporary output destinations to `export-pdb-symbols.py <image> <symbols.tsv> --module PA --types-out <types.tsv>`.
 
-```powershell
-python 'analyze client/export-pdb-symbols.py' 'bins/14190493/bin_x64/PA.exe' 'analyze client/pa-symbols.tsv' --module PA --types-out 'analyze client/pa-types.tsv'
-python 'analyze client/inspect-pe-imports.py'
-```
-
-The second script targets `bins/14190493` and exports `pe-imports.tsv` and `gl-string-candidates.txt`. Retain those files, the symbol/type TSVs, shader manifests and Ghidra client database as underlying evidence. The PDB pass alone recovered names and types; the frame/pass/GL call relationships above come from later function-body and callsite analysis.
+The PE inspector accepts `inspect-pe-imports.py --image <PA.exe> --out <temporary-directory>` and generates `pe-imports.tsv` and `gl-string-candidates.txt`. These inventories are reproducible exports; keep reusable conclusions in this reference and regenerate the raw listings when needed. The PDB pass supplies names and types, while frame/pass/GL relationships require function-body and callsite analysis in the configured Ghidra project.
 
 Shader sources in this build predominantly declare GLSL 1.40. That does not establish the minimum supported GL context: the loader also names newer and extension entry points, whose optional checks and fallback behavior have not been fully established.
 

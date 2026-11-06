@@ -13,7 +13,7 @@ Everything else in this section is static. The following points need a live sess
 
 ## Method: Frida attach
 
-The prepared observer is `coherent-render-capture.js` in the research repository (`analyze client/20-coherent-contract/`). It records API boundaries and handles only; it does not dump mapped pixels. Constraints from the research:
+The prepared Frida observer is `coherent-render-capture.js` in the shared tools. It records API boundaries and handles only; it does not dump mapped pixels. Constraints from the research:
 
 - Start `PA.exe` normally, wait until the UI is visible, then attach to the running process. Do not use `frida -f`: it would launch a second client.
 - Attach separately to the already-running `CoherentUI_Host.exe` child with the same script. Find its PID first.
