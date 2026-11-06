@@ -13,6 +13,7 @@
 | World | [Layers](Entities/World/Layers.md) |
 | Galactic War | [Basics](Galactic%20War%20Modding.md) |
 | Server scripting | [LAN PvP server scripts](Server%20Scripts/README.md) |
+| Client internals | [Coherent UI in the game client](Coherent%20UI/README.md) |
 
 ## Modding tools
 

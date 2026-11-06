@@ -146,7 +146,7 @@ Get-CimInstance Win32_Process -Filter "Name='PA.exe'" | Select-Object ProcessId,
 - A refused connection usually means `--coherent_port` was not passed, not that PA is closed.
 - **The PID listening on the port is the CoherentUI host helper, not `PA.exe`.** Killing it takes the
   port down and leaves `PA.exe` running, holding its profile lock, unreachable. Find the real process
-  by command line (`CommandLine -like "*gwo_host*"`).
+  by command line (`CommandLine -like "*gwo_host*"`). See also [Coherent UI in the game client](../../Coherent%20UI/README.md) for how the host process is spawned.
 
 ### 1.3 The driver (`cdp.js`)
 

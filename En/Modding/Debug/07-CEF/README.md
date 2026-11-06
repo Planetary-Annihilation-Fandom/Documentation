@@ -13,5 +13,6 @@ re-verified on later builds, and none of this applies to the shipping Coherent b
 - Unchanged: match targets by URL; one client per target; `api.*` stays promise-based; scene
   navigation by `coui://` URL and the start → gw_start → gw_play flow work.
 - Re-check `Page.captureScreenshot` on CEF before assuming it fails.
+- See also: [Coherent UI in the game client](../../Coherent%20UI/README.md) for the shipping Coherent host boundary.
 
 ---
