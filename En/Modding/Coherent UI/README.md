@@ -13,10 +13,11 @@ How the shipping client (`PA.exe` build 14190493, Windows x64) talks to Coherent
 | `engine.call` handlers and native-to-JavaScript events | [JavaScript-native bridge](JavaScript-native%20bridge.md) |
 | What an ABI-compatible replacement DLL must provide | [Replacing the DLL](Replacing%20the%20DLL.md) |
 | Runtime facts that were not established, and how to check them | [Open questions](Open%20questions.md) |
+| Standalone Servo fixtures, embedding smoke and real-client UI measurements | [Servo and UI validation](Servo%20and%20UI%20validation.md) |
 
 ## How to read the findings
 
-Every claim carries an evidence type. All findings in this section are static; no live trace of a running client was taken.
+The ABI, bridge and surface reference pages below report static analysis of the shipping client; no live trace was used for those findings. [Servo and UI validation](Servo%20and%20UI%20validation.md) separately describes fixture/browser runs, embedding build/launch evidence and real-client measurements, with their own verification limits.
 
 | Evidence | Meaning |
 |---|---|

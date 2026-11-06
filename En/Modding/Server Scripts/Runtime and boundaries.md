@@ -49,6 +49,8 @@ A separate helper process can perform host-side work through an experimental fil
 
 The Node helper bridge described above is **confirmed** for loopback HTTP GET in a separate process. It does not make direct HTTP or HTTPS available to `file.load`.
 
+Later experiments registered a new global `native` object in a modified/instrumented copy of build `14190493`, with file operations and asynchronous TCP/HTTP. Those results describe an added native extension, not the stock script surface or `file.load`; see [Experimental native extensions](Experimental%20native%20extensions.md).
+
 Do not probe URL schemes with `file.load` on this build: either HTTP or HTTPS URL call triggers a breakpoint and terminates the server before any network request reaches the supplied loopback host.
 
 ## Inspecting the executable
