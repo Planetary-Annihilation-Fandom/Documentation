@@ -24,9 +24,9 @@ Empty PDB class records still give the ABI size; they say nothing about implemen
 | `UIBridge::Panel` (view listener) | `0x1405CF588` | see below | Ghidra xref (function-pointer xrefs) |
 | `IEventHandler` interface | `0x1405B7198` | 0 deleting destructor, 1 and 2 pure-call placeholders | Ghidra xref |
 | `EventHandler<void(ClientGame::*)(string)>` | `0x1405B7260` | 0 deleting destructor, 1 `Invoke(ArgumentsBinder*)` (`0xB0FD0`), 2 `GetTarget()` (`0xB06F0`) | Ghidra xref |
-| `CoherentLogHandler` | `0x1405D0A48` | 0 vector-deleting destructor (`0x1AAA50`), 1 `WriteLog` (`0x1AA9D0`), 2 `Assert` (`0x198C0`, see note) | Ghidra xref |
+| `CoherentLogHandler` | `0x1405D0A48` | 0 vector-deleting destructor (`0x1AAA50`), 1 `WriteLog` (`0x1AA9D0`), 2 `Assert` (`0x198C0`, shared empty body, see note) | Ghidra xref |
 
-Other concrete `EventHandler` specializations follow the same `Invoke`/`GetTarget` pattern with their own `Invoke` signatures. The log handler table is the host implementation's, not a claim about the DLL's `ILogHandler` layout. The `Assert` RVA is printed with five digits in the source, unlike its neighbours; check it before relying on it.
+Other concrete `EventHandler` specializations follow the same `Invoke`/`GetTarget` pattern with their own `Invoke` signatures. The log handler table is the host implementation's, not a claim about the DLL's `ILogHandler` layout. Slot 2 (`Assert`) points to RVA `0x198C0`, a 3-byte empty function that the linker folded with other empty bodies (Ghidra names it `crom::NullAudioWrapper::registerCueMod`); the host's `Assert` does nothing (vtable bytes, Ghidra).
 
 ### Panel callback slots
 
@@ -108,7 +108,7 @@ Event registration is done in `ClientGame::bindToCoherent` (`0x6EF30`), `VenderC
 | 29-37 | `OnReadTypeEnd()` (`0x35860`), `ReadProperty(char*) -> bool` (`0x36740`), `ReadArrayBegin() -> uint64` (`0x361F0`), `ReadArrayElement(uint64)` (`0x362F0`), `ReadArrayEnd()` (`0x363C0`), `ReadMapBegin() -> uint64` (`0x36510`), `ReadKeyValuePair()` (`0x36450`), `ReadMapEnd()` (`0x366E0`), `PeekValueType() -> ValueType` (`0x358B0`) | same implementations |
 | 38-39 | `EventBegin(char*, uint64)` (`0x51800`), `EventEnd()` (`0x51940`) | pure-call entries |
 
-Slots 38 and 39 are listed in the source for the concrete tables although the abstract table has 38 entries (slots 0-37); the sources do not reconcile this. Treat the concrete tables as 40 slots and the abstract count as unreconciled.
+The abstract `Binder` table has 38 slots (0-37); the entry after slot 37 is the next table's RTTI pointer (vtable bytes). `ViewBinder` adds slots 38-39 (`EventBegin`/`EventEnd`), so concrete tables have 40 slots.
 
 `ArgumentsBinder` base table: `JStoNativeBinder` at `0xD68E0` (7 slots); the corresponding `ViewBinder` table is at `0xDAC38` (its slots are not listed in the sources).
 
