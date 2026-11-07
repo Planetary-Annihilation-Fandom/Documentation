@@ -139,11 +139,11 @@ Addresses are callback RVAs from `server-symbols.tsv` for the installed build 20
 | `sim.getValidTimeRange` | — | direct |
 | `sim.shutdown` | — | direct |
 | `sim.initAlliances` | — | direct |
-| `server.setGameConfig` | `0x74bd0` | via V8 |
+| `server.setGameConfig` | `0x94a10` (14190493) | via V8: parses a JSON string with `zu::Json::readFrom`, then calls host vtable slot `0x70`; separable, but a direct call needs adapter-built `StringRangeStream`/`Json` objects |
 | `server.getGameConfig` | `0x72150` | via V8 (not in baseline trace) |
 | `sim.create` | `0x88a80` | via V8; a direct attempt was not confirmed |
 | `sim.prepareStartLocation` | `0x8a680` | via V8 |
-| `sim.enableSave` | — | via V8 |
+| `sim.enableSave` | `0x85ca0` (14190493) | direct (commit 4b3d6d3) |
 | `sim.step` | `0x8c2b0` | via V8 (tick) |
 | `sim.setDiplomaticState` | `0x89d00` | via V8 |
 | army `finalizeEconomy`, `getDiplomaticState` | — | via V8 |
