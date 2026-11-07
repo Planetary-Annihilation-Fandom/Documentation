@@ -129,3 +129,11 @@ The client sends stock lobby messages to add a human army and an idle AI army, s
 ### V8 ABI for the bridge (build 14190493, PAR-62)
 
 Verified from SpiderMonkey inside a live V8 callback frame: `Script::Compile(Local<Script>* out, Local<Context>, Local<String>, ScriptOrigin*)` at RVA `0x533020`; `Script::Run(Local<Script> self, Local<Value>* out, Local<Context>)` at `0x53df70`; `Utf8Value::Utf8Value(this{char* str; int length}, Isolate*, Local<Value>)` at `0x531c40`, destructor `0x496f20`. `Local<T>` is passed as the handle pointer; functions returning `Local<T>` take the destination slot address first. `ScriptOrigin` is a 56-byte zeroed struct whose first field is the resource-name handle. `Tools/sm_native_callback_trace.py --mode script-eval` runs `JSON.stringify(...)` in V8 and returns the UTF-8 result. Not yet checked: a frame outside the console callback (`js_setGameState`).
+
+### SpiderMonkey network match (PAR-66, blocked)
+
+Run `tools/frida/frida16-venv/Scripts/python.exe server/spidermonkey/embed/tools/sm_env_attach.py --engine sm --network-match --seconds 360 --port 20759 --output <empty-directory>` with the same prerequisites and free ports as the V8 match. This copies the stock server scripts without the baseline overlay and runs the PAR-59 client probe. The run forcibly terminates both processes.
+
+The checked SpiderMonkey run accepted the client and entered the stock lobby, but did not broadcast an army after `add_army` and timed out waiting for `sim_ready`; `NETWORK_PROBE_FAIL` is expected until the bridge is fixed. The V8 control in PAR-59 reached game over and the client received the result. In the current forwarding code, `server.onConnect` receives JSON-decoded callback arguments: the client argument is a detached object, so `server_utils.js` assigns `onMessage` to that copy rather than the live native client. This is a concrete limitation of callback/object forwarding for PAR-65; later match behavior remains untested.
+
+Instrumentation recorded `main` loaded by SpiderMonkey, 26 SpiderMonkey modules and 210 timer callbacks. `SourceModule::init` is replaced on this path; V8 compile/run counters were 29 each because the current native bridge itself evaluates V8 code. These counters do not demonstrate V8-free execution: V8 remains active for forwarded natives and the tick driver.
