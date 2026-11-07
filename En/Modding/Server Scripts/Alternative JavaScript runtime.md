@@ -116,38 +116,6 @@ Run `sm_env_attach.py --engine sm --baseline --trace-natives --seconds 180 --out
 
 In that trace, the remaining forwarded calls were `server.setGameConfig`; `sim.create`, `enableSave`, `prepareStartLocation`; collection `push` on armies/effects/units; army `finalizeEconomy` and `getDiplomaticState`; and planet `genMetalAndLandingSpots`. Reads and writes of clients, handlers, state fields, simulation collections and their members also use the bridge. They remain forwarded because native receiver, conversion, object identity and lifetime coverage has not yet been implemented and validated; this observation does not establish that they are inseparable from V8. Hook forwarding and the tick driver also still depend on V8. `file.load` and `loadBlocking` use the host mount table, not the bridge; other file operations remain unbound.
 
-## Baseline and content consistency
-
-The copied `14190493` server was checked against `bins/14190493` by SHA-256 (`5D6C9065D1C7422F62A20B354032BD0B7FD0A1F83F3A85FD61961C13E3CDD617`). Its file version is `120799.20240426195444`; without adjacent `buildid.txt` it logs fallback build ID `20181219120799` and version `unknown`. A fallback log label does not identify the actual binary.
-
-The V8 baseline reached lobby and emitted `server_state`. A separate benchmark reached `valgrind_playing` with eight AI armies and exited on `--time-limit`; it did not establish a `game_over` transition. A shorter timeout expired during planet generation. A controlled lobby reproduction isolated Winsock error 10106 to the child environment: removing both `SystemRoot` and `WINDIR` produced `socket() failed, err=10106` in `GameServerImpl::setListenerState` immediately after entering the lobby. With both variables present, the same build and launch settings remained in the lobby for 20 seconds without that error. This does not distinguish which variable is required.
-
-The original baseline mounted the installed game's newer media through a junction. Missing `land_scout_tool_dummy_weapon.json` and zero-position navigation errors therefore need a version-consistent reproduction before attributing them to a runtime change. Those earlier runs did not establish a full match or a matched V8/SpiderMonkey performance comparison.
-
-A follow-up lobby run used the `bins/14190493` media directory with the matching executable, `--headless --no-players --disable-replays --port 20731`, and no `--scripturl` override. It entered `config` and `lobby`, emitted `server_state`, and reported that no UPnP gateway was found; the launcher killed it after 20 seconds, so this is not a completed match or clean shutdown. `valgrind_playing` exits directly when at most one army remains, rather than transitioning to `game_over`; the normal `playing` state is required for this gate.
-
-A fixture at `server/v8/baseline/run.py` runs the stock V8 executable with generated lobby, landing and playing script overrides. It creates two idle AI armies on a radius-450 planet, chooses an existing landing zone directly for each, and explicitly defeats one army after simulation time exceeds 10 seconds. The checked run reached `lobby`, `landing`, `playing`, `game_over`, script-environment shutdown and server shutdown with exit code 0; each army's statistics reported one unit created. This is a simulated lobby with forced defeat, not a network-client test or natural victory.
-
-Run `python server/v8/baseline/run.py --output <empty-directory>` from the repository root. It checks the executable and full media-tree SHA-256, validates ordered lifecycle markers, both spawn markers and unit statistics, checks selected content errors and requires exit code 0. The generated script overrides and server log are saved in the output directory. No third-party mods are selected; the script rejects a nonempty Windows PA Server `download` directory before and after the run. The server still mounts that directory, so do not add files during a run. SystemRoot and WINDIR must both be present.
-
-The matching media contains the previously missing `pa_ex1/units/land/land_scout/land_scout_tool_dummy_weapon.json`; the checked fixture did not report a missing file. `NavWorld::snapPosToGround() recieved zero pos!` recurred in the stock landing path during `aiSpawnLocation`: its input zones and returned locations were nonzero in the instrumented run. The fixture avoids that call by using a generated zone directly and reported no zero-position error. This is a test workaround, not a diagnosis or repair of the native function. `{idle: true}` avoids invalid AI personality errors. UPnP discovery and removal failed on this host; the headless, no-client fixture completed despite those messages.
-
-### Stock listener probe (PAR-59, partial)
-
-Run `python server/v8/baseline/listener_probe.py --output <empty-directory>` on Windows. With the pinned server, matching media and no script overrides, the checked run printed `LISTENER_PASS lobby=True owned=True tcp=True`: the server reached `lobby`, its PID owned the loopback TCP listener, and a TCP connection succeeded. The probe terminates the server; it checks neither clean shutdown nor the PA handshake, lobby configuration, match or result delivery. It uses `--no-players`, so this is a listener diagnostic rather than a client scenario. The server download directory must be empty, and the output directory retains the log.
-
-An isolated hidden-desktop launch of `bins/14190493/bin_x64/PA.exe` with a separate profile logged missing `bin_x64/host/icudtl.dat` and resource packs, including an ICU initialization failure in host processes. The installed game has a complete host runtime and different media; its client can nevertheless establish the limited session below with this server. This does not establish full version compatibility.
-
-Run `python server/v8/baseline/network_probe.py --output <empty-directory>` on this Windows host with Node and the installed game; `--client-root` selects another installation. It starts the pinned server with its stock scripts, waits for its own loopback listener, starts an isolated client profile on a hidden desktop, and uses Coherent's debugging port to call the client's native networking API. The tested installed `PA.exe` SHA-256 was `070e086f97114650792f7822fb4fd7f4ef17276b5cdd2546b5615a9e11c6fee8`. The checked run printed `NETWORK_PROBE_PASS`: client log contained `connection_LoginAccepted`; server log recorded login, one connected client, `lobby`, an `add_army` command, a one-slot army broadcast, a chat command and its broadcast. Both processes are forcibly terminated, and the output directory retains their logs. The dedicated profile and debug/game ports must be free; the server download directory must remain empty. The installed client is not hash-pinned by the script, so record and compare its printed hash when reproducing.
-
-The full network path is reproduced by `python server/v8/baseline/network_probe.py --match --matched-client --output <empty-directory>`. The script assembles a temporary client from the 14190493 binary and media plus the installed game's Coherent host files, checks the server and media hashes, and prints the client and host-tree hashes. The checked host tree hash was `56be2e28e425adb8abf9fe509d1abbbe751f3984e85260027fc37e8bd32855df`; the client binary hash was `3005d2380f1e42c6f5ec443e2bf0c01eeeede2e73015c80c62e8350a44113eed`. The output directory contains the assembled client, a junction to matching media, and logs. Use an unused dedicated client profile and free ports, and keep the server download directory empty.
-
-The client sends stock lobby messages to add a human army and an idle AI army, select a system, start the match, and surrender after `playing`. `force_start` selects the server's normal automatic landing. The checked runs reached `lobby`, `landing`, `playing` and `game_over`; `CLIENT_RECEIVED_GAME_OVER`, `CLIENT_RESULT` with a named victor and `playerIsWinner:false`, and `NETWORK_PROBE_PASS` establish that the client UI received and displayed the result. The test forces surrender and terminates both processes; it does not establish natural victory or clean shutdown. The unmodified AI landing path logged `NavWorld::snapPosToGround() recieved zero pos!`, so this is not a clean content baseline. An earlier run with the newer installed client reached `playing` but aborted with `attempt to sample an empty curve` before receiving the result; the mixed client setup above avoided that observed failure without establishing general cross-version compatibility.
-
-### V8 ABI for the bridge (build 14190493, PAR-62)
-
-Verified from SpiderMonkey inside a live V8 callback frame: `Script::Compile(Local<Script>* out, Local<Context>, Local<String>, ScriptOrigin*)` at RVA `0x533020`; `Script::Run(Local<Script> self, Local<Value>* out, Local<Context>)` at `0x53df70`; `Utf8Value::Utf8Value(this{char* str; int length}, Isolate*, Local<Value>)` at `0x531c40`, destructor `0x496f20`. `Local<T>` is passed as the handle pointer; functions returning `Local<T>` take the destination slot address first. `ScriptOrigin` is a 56-byte zeroed struct whose first field is the resource-name handle. `Tools/sm_native_callback_trace.py --mode script-eval` runs `JSON.stringify(...)` in V8 and returns the UTF-8 result. Not yet checked: a frame outside the console callback (`js_setGameState`).
-
 ### SpiderMonkey network match (PAR-66, blocked)
 
 Run `tools/frida/frida16-venv/Scripts/python.exe server/spidermonkey/embed/tools/sm_env_attach.py --engine sm --network-match --seconds 360 --port 20759 --output <empty-directory>` with the same prerequisites and free ports as the V8 match. This copies the stock server scripts without the baseline overlay and runs the PAR-59 client probe. The run forcibly terminates both processes.
@@ -155,3 +123,31 @@ Run `tools/frida/frida16-venv/Scripts/python.exe server/spidermonkey/embed/tools
 The checked SpiderMonkey run accepted the client and entered the stock lobby, but did not broadcast an army after `add_army` and timed out waiting for `sim_ready`; `NETWORK_PROBE_FAIL` is expected until the bridge is fixed. The V8 control in PAR-59 reached game over and the client received the result. In the current forwarding code, `server.onConnect` receives JSON-decoded callback arguments: the client argument is a detached object, so `server_utils.js` assigns `onMessage` to that copy rather than the live native client. This is a concrete limitation of callback/object forwarding for PAR-65; later match behavior remains untested.
 
 Instrumentation recorded `main` loaded by SpiderMonkey, 26 SpiderMonkey modules and 210 timer callbacks. `SourceModule::init` is replaced on this path; V8 compile/run counters were 29 each because the current native bridge itself evaluates V8 code. These counters do not demonstrate V8-free execution: V8 remains active for forwarded natives and the tick driver.
+
+### Binding status table (PAR-65, partial)
+
+Addresses are callback RVAs from `server-symbols.tsv` (confirmed in both builds). "Direct" means the adapter calls the native host without V8 in a baseline that reached `game_over` and exited 0. A dash means no callback address has been captured yet; the match of `dump_lib.js` names to `FunctionTemplate::New` callbacks (`tools/frida/v8.js`) is not run, so those rows rest on the forwarded-call trace only.
+
+| Binding | Callback RVA | Status |
+|---|---|---|
+| `server.setGameState` | `0x74d10` | direct |
+| `server.recordGameEvent` | — | direct |
+| `server.incrementTitleStatistic` | — | direct |
+| `server.writeReplay` | `0x75540` | direct |
+| `server.exit` | — | direct |
+| `sim.time` (getter) | — | direct |
+| `sim.getValidTimeRange` | — | direct |
+| `sim.shutdown` | — | direct |
+| `sim.initAlliances` | — | direct |
+| `server.setGameConfig` | `0x74bd0` | via V8 |
+| `server.getGameConfig` | `0x72150` | via V8 (not in baseline trace) |
+| `sim.create` | `0x88a80` | via V8; a direct attempt was not confirmed |
+| `sim.prepareStartLocation` | `0x8a680` | via V8 |
+| `sim.enableSave` | — | via V8 |
+| `sim.step` | `0x8c2b0` | via V8 (tick) |
+| `sim.setDiplomaticState` | `0x89d00` | via V8 |
+| army `finalizeEconomy`, `getDiplomaticState` | — | via V8 |
+| planet `genMetalAndLandingSpots` | — | via V8 |
+| collection `push` (armies, effects, units) | — | via V8 |
+
+Direct: 9 of 19 rows. The rest need receiver, conversion and object-identity coverage; none is shown to be inseparable from V8. Limits for the planned name-to-address match: some reads kill the server (`sim.initDropletTest`, `sim.navDebugEnabled`), collection elements are hidden from the walker, and many calls need known arguments or live-match state.
