@@ -126,7 +126,7 @@ Instrumentation recorded `main` loaded by SpiderMonkey, 26 SpiderMonkey modules 
 
 ### Binding status table (PAR-65, partial)
 
-Addresses are callback RVAs from `server-symbols.tsv` (confirmed in both builds). "Direct" means the adapter calls the native host without V8 in a baseline that reached `game_over` and exited 0. A dash means no callback address has been captured yet; the match of `dump_lib.js` names to `FunctionTemplate::New` callbacks (`tools/frida/v8.js`) is not run, so those rows rest on the forwarded-call trace only.
+Addresses are callback RVAs from `server-symbols.tsv` for the installed build 20261016195339 only ("both" in that file means static plus runtime confirmation, not two builds). In build 14190493 the same RVA is not the same code: `0x74bd0` falls inside `SimModule::init`. The addresses are therefore not valid for the adapter's build until re-captured there. "Direct" means the adapter calls the native host without V8 in a baseline that reached `game_over` and exited 0. A dash means no callback address has been captured yet; the match of `dump_lib.js` names to `FunctionTemplate::New` callbacks (`tools/frida/v8.js`) is not run, so those rows rest on the forwarded-call trace only.
 
 | Binding | Callback RVA | Status |
 |---|---|---|
