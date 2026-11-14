@@ -16,6 +16,11 @@
 - **"Memory files are gone after a scene change."** They survive; something called
   `unmountAllMemoryFiles`, a later root zip mount won, or a mounted mod ships that path ([§5.1](../05-Engine-Facts/README.md#51-file-system)).
 - **"The DOM says it's visible, so it renders."** Not in root `live_game`, not in every panel.
+- **"The final state is right, so the panel did not flicker."** Reading the model or a screenshot
+  after the change shows only the end result. A HUD panel is a separate native view: for a few
+  frames the parent has not resized it yet and new content is painted clipped to the old size. To
+  see that frame, busy-wait the panel page for a few seconds two `requestAnimationFrame`s after the
+  change and capture the window during the freeze.
 - **"`_.where(list, fn)` filtered the list."** It filtered nothing.
 - **"`$.when(api.x())` waited."** It did not.
 - **"The file on disk changed but the game still sees the old one."** `spec://` cache, a new file

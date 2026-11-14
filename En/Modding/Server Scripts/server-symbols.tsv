@@ -1,0 +1,136 @@
+build	rva	name	kind	confirmed	source
+20261016195339	0x88a80	sim.create	binding-callback	both	Frida registration capture + static string xrefs
+20261016195339	0x8a680	sim.prepareStartLocation	binding-callback	both	Frida registration capture + static string xrefs
+20261016195339	0x89d00	sim.setDiplomaticState	binding-callback	both	Frida registration capture + static string xrefs
+20261016195339	0x8c2b0	sim.step	binding-callback	both	Frida registration capture + static string xrefs
+20261016195339	0x72150	server.getGameConfig	binding-callback	both	Frida registration capture + static string xrefs
+20261016195339	0x74bd0	server.setGameConfig	binding-callback	both	Frida registration capture + static string xrefs
+20261016195339	0x74d10	server.setGameState	binding-callback	both	Frida registration capture + static string xrefs
+20261016195339	0x748c0	server.readReplay	binding-callback	both	Frida registration capture + static string xrefs
+20261016195339	0x72d60	server.loadSave	binding-callback	both	Frida registration capture + static string xrefs
+20261016195339	0x75540	server.writeReplay	binding-callback	both	Frida registration capture + static string xrefs
+20261016195339	0x73520	server.markLadderGameComplete	binding-callback	both	Frida registration capture + static string xrefs
+14190493	0x778d0	sim.create	binding-callback	both	pdb SimModule::js_create
+14190493	0x85b10	sim.prepareStartLocation	binding-callback	both	pdb SimModule::js_prepare_start_location
+14190493	0x85790	sim.setDiplomaticState	binding-callback	both	pdb SimModule::js_set_diplomatic_state
+14190493	0x77990	sim.step	binding-callback	both	pdb SimModule::js_step
+14190493	0x94c00	server.getGameConfig	binding-callback	both	pdb ServerModule::js_getGameConfig
+14190493	0x94a10	server.setGameConfig	binding-callback	both	pdb ServerModule::js_setGameConfig
+14190493	0x93d70	server.setGameState	binding-callback	both	pdb ServerModule::js_setGameState
+14190493	0x941a0	server.readReplay	binding-callback	both	pdb ServerModule::js_readReplay
+14190493	0x94e70	server.loadSave	binding-callback	both	pdb ServerModule::js_loadSave
+14190493	0x96b30	server.writeReplay	binding-callback	both	pdb ServerModule::js_writeReplay
+14190493	0x95590	server.markLadderGameComplete	binding-callback	both	pdb ServerModule::js_markLadderGameComplete
+20261016195339	0x558e10	v8::FunctionTemplate::New	v8-api	both	Frida callback ABI probe; server/v8/native-api/bridge-agent.js
+20261016195339	0x55cdc0	v8::FunctionTemplate::SetCallHandler	v8-api	static	Ghidra binding registration string xref
+20261016195339	0x559b80	v8::String::NewFromUtf8	v8-api	runtime	server/v8/native-api/bridge-agent.js; callback round-trip check
+20261016195339	0x54f7e0	v8::String::Utf8Value::Utf8Value	v8-api	runtime	Frida callback ABI analysis (value-to-UTF-8 helper; identified by call pattern, not by name)
+20261016195339	0x55d480	v8::ObjectTemplate::SetHandler	v8-api	static	Ghidra static analysis (string xref)
+14190493	0x53b2a0	v8::FunctionTemplate::New	v8-api	both	pdb v8::FunctionTemplate::New
+14190493	0x53f250	v8::FunctionTemplate::SetCallHandler	v8-api	static	pdb v8::FunctionTemplate::SetCallHandler
+14190493	0x53c010	v8::String::NewFromUtf8	v8-api	both	pdb v8::String::NewFromUtf8
+14190493	0x531c40	v8::String::Utf8Value::Utf8Value	v8-api	both	pdb v8::String::Utf8Value::Utf8Value
+14190493	0x53fa40	v8::ObjectTemplate::SetHandler	v8-api	static	pdb v8::ObjectTemplate::SetHandler (overload 1 of 2)
+14190493	0x53f910	v8::ObjectTemplate::SetHandler	v8-api	static	pdb v8::ObjectTemplate::SetHandler (overload 2 of 2)
+14190493	0x53b580	v8::Object::New	v8-api	static	pdb v8::Object::New
+14190493	0x53e7a0	v8::Object::Set	v8-api	static	pdb v8::Object::Set
+14190493	0x538960	v8::Context::Global	v8-api	static	pdb v8::Context::Global
+14190493	0x536e70	v8::Isolate::GetCurrent	v8-api	static	pdb v8::Isolate::GetCurrent
+14190493	0x536e80	v8::Isolate::GetCurrentContext	v8-api	static	pdb v8::Isolate::GetCurrentContext
+14190493	0x53b080	v8::Function::New	v8-api	static	pdb v8::Function::New
+14190493	0x53af30	v8::Context::New	v8-api	both	pdb v8::Context::New
+14190493	0x5367e0	v8::Object::Get	v8-api	static	pdb v8::Object::Get
+14190493	0x53ea30	v8::Template::Set	v8-api	both	pdb v8::Template::Set
+14190493	0x53b6e0	v8::ObjectTemplate::New	v8-api	both	pdb v8::ObjectTemplate::New
+20261016195339	0x6e280	ServerModule::init	engine	both	Ghidra static analysis (FUN_14006E280: registers server.*)
+20261016195339	0x82e00	SimModule::init	engine	both	Ghidra static analysis (FUN_140082E00: registers sim.*)
+20261016195339	0x726d0	ServerModule::js_get_uPNPStatus	engine	runtime	server/v8/native-api/bridge-agent.js
+20261016195339	0x560840	FunctionCallbackInfo state helper	engine	runtime	Frida callback ABI analysis (0x560840: info+0x20 to state; context at state+0x30; no PDB name)
+20261016195339	0x4b0450	Utf8Value dispose	engine	runtime	server/v8/native-api/bridge-agent.js (frees the helper result; no PDB name)
+14190493	0x8ff10	ServerModule::init	engine	static	pdb ServerModule::init
+14190493	0x74780	SimModule::init	engine	static	pdb SimModule::init
+14190493	0x93940	ServerModule::js_get_uPNPStatus	engine	static	pdb ServerModule::js_get_uPNPStatus
+14190493	0x386dd0	SDL_main	engine	static	pdb SDL_main
+14190493	0x21c90	crom::Game::updateAndPresent	engine	static	pdb crom::Game::updateAndPresent
+14190493	0x29770	ServerGame::setup	engine	static	pdb ServerGame::setup
+14190493	0x30100	ServerGame::update	engine	static	pdb ServerGame::update
+14190493	0x2cb10	ServerGame::dispatch	engine	static	pdb ServerGame::dispatch
+14190493	0x45ba0	GameServerImpl::createSim	engine	static	pdb GameServerImpl::createSim
+14190493	0x46ff0	GameServerImpl::simTickOnce	engine	static	pdb GameServerImpl::simTickOnce
+14190493	0x47820	GameServerImpl::simSync	engine	static	pdb GameServerImpl::simSync
+14190493	0x304c0	ServerGame::newConnection	engine	static	pdb ServerGame::newConnection
+14190493	0x30530	ServerGame::recvMessage	engine	static	pdb ServerGame::recvMessage
+14190493	0x30770	ServerGame::recvModFileData	engine	static	pdb ServerGame::recvModFileData
+14190493	0x30c00	ServerGame::disconnected	engine	static	pdb ServerGame::disconnected
+14190493	0x8fb70	ServerModule::ClientInfo::setup	engine	static	pdb ServerModule::ClientInfo::setup
+14190493	0x97b90	ServerModule::message	engine	static	pdb ServerModule::message
+14190493	0x93070	ServerModule::js_client_message	engine	static	pdb ServerModule::js_client_message
+14190493	0x21c00	netutil::UberProtoPipe::recv	engine	static	pdb netutil::UberProtoPipe::recv
+14190493	0x60490	netutil::UberProtoPipe::sendUp<GameClientCommand>	engine	static	pdb netutil::UberProtoPipe::sendUp<GameClientCommand>
+14190493	0x301fa0	HistoryServer::Connection::pull	engine	static	pdb HistoryServer::Connection::pull
+14190493	0x69570	FileModule::init	engine	static	pdb FileModule::init
+14190493	0x69960	FileModule::js_load	engine	static	pdb FileModule::js_load
+14190493	0x6a6b0	FileModule::js_loadBlocking	engine	static	pdb FileModule::js_loadBlocking
+14190493	0x6ad00	FileModule::js_mountMemoryFiles	engine	static	pdb FileModule::js_mountMemoryFiles
+14190493	0x6b6b0	FileModule::js_unmountAllMemoryFiles	engine	static	pdb FileModule::js_unmountAllMemoryFiles
+14190493	0x32b30	ServerGame::mountFilePath	engine	static	pdb ServerGame::mountFilePath
+14190493	0x32c10	ServerGame::mountContent	engine	static	pdb ServerGame::mountContent
+14190493	0x3f2d40	WindowsFilesystem::mount	engine	static	pdb WindowsFilesystem::mount
+14190493	0x3f3d20	WindowsFilesystem::open	engine	static	pdb WindowsFilesystem::open
+14190493	0x3f4ae0	WindowsFilesystem::listDir	engine	static	pdb WindowsFilesystem::listDir
+14190493	0x3f5bb0	WindowsFilesystem::resolveAlias	engine	static	pdb WindowsFilesystem::resolveAlias
+14190493	0x3d19c0	LoadedRemoteModCollectionImpl::mountToMemoryFilesystem	engine	static	pdb LoadedRemoteModCollectionImpl::mountToMemoryFilesystem
+14190493	0x5ab70	GameServerImpl::readReplay	engine	static	pdb GameServerImpl::readReplay
+14190493	0x5a770	GameServerImpl::loadReplay	engine	static	pdb GameServerImpl::loadReplay
+14190493	0x59f70	GameServerImpl::writeReplay	engine	static	pdb GameServerImpl::writeReplay
+14190493	0x5bca0	GameServerImpl::createSimFromReplay	engine	static	pdb GameServerImpl::createSimFromReplay
+14190493	0x2e1d0	ServerGame::readReplayFile	engine	static	pdb ServerGame::readReplayFile
+14190493	0x2e9b0	ServerGame::writeReplayFile	engine	static	pdb ServerGame::writeReplayFile
+14190493	0x2f8d0	ServerGame::loadSave	engine	static	pdb ServerGame::loadSave
+14190493	0x45880	GameServerImpl::enableBeacon	engine	static	pdb GameServerImpl::enableBeacon
+14190493	0x459c0	GameServerImpl::updateBeacon	engine	static	pdb GameServerImpl::updateBeacon
+14190493	0x45b30	GameServerImpl::disableBeacon	engine	static	pdb GameServerImpl::disableBeacon
+14190493	0x2b9b0	ServerGame::setupUPNP	engine	static	pdb ServerGame::setupUPNP
+14190493	0x24e10	ServerGame::ServerModuleAdaptor::httpRequestCompleted	engine	static	pdb ServerGame::ServerModuleAdaptor::httpRequestCompleted
+14190493	0x24fd0	ServerGame::ServerModuleAdaptor::httpRequestFailed	engine	static	pdb ServerGame::ServerModuleAdaptor::httpRequestFailed
+14190493	0x251c0	ServerGame::ServerModuleAdaptor::httpRequestAborted	engine	static	pdb ServerGame::ServerModuleAdaptor::httpRequestAborted
+14190493	0x6c250	ServerScriptEnv::ServerScriptEnv	engine	static	pdb ServerScriptEnv::ServerScriptEnv
+14190493	0x6cb50	ServerScriptEnv::load	engine	static	pdb ServerScriptEnv::load
+14190493	0x6ccf0	ServerScriptEnv::setModule	engine	static	pdb ServerScriptEnv::setModule
+14190493	0x6e9c0	ServerScriptEnv::createGlobalTemplate	engine	static	pdb ServerScriptEnv::createGlobalTemplate
+14190493	0x6f7d0	ServerScriptEnv::js_require	engine	static	pdb ServerScriptEnv::js_require
+14190493	0x539820	v8::V8::InitializeICU	v8-api	static	pdb v8::V8::InitializeICU
+14190493	0x544880	v8::platform::NewDefaultPlatform	v8-api	static	pdb v8::platform::NewDefaultPlatform
+14190493	0x539830	v8::V8::InitializePlatform	v8-api	static	pdb v8::V8::InitializePlatform
+14190493	0x5397b0	v8::V8::Initialize	v8-api	static	pdb v8::V8::Initialize
+14190493	0x53bdb0	v8::ArrayBuffer::Allocator::NewDefaultAllocator	v8-api	static	pdb v8::ArrayBuffer::Allocator::NewDefaultAllocator
+14190493	0x53b4d0	v8::Isolate::New	v8-api	static	pdb v8::Isolate::New
+14190493	0x533020	v8::Script::Compile	v8-api	static	pdb v8::Script::Compile
+14190493	0x53df70	v8::Script::Run	v8-api	static	pdb v8::Script::Run
+14190493	0x6ca700	v8::internal::Version::GetString	v8-api	static	pdb v8::internal::Version::GetString
+14190493	0x6c940	ServerScriptEnv::~ServerScriptEnv	engine	static	pdb ServerScriptEnv::~ServerScriptEnv
+14190493	0x74720	ServerModule::ready	engine	static	pdb ServerModule::ready
+14190493	0x76a70	ServerModule::getExports	engine	static	pdb ServerModule::getExports
+14190493	0x69510	FileModule::ready	engine	static	pdb FileModule::ready
+14190493	0x69920	FileModule::getExports	engine	static	pdb FileModule::getExports
+20261016195339	0x4fcf0	GameServerImpl::createSimFromReplay	engine	10.000	pdb-14190493
+20261016195339	0x550b90	v8::Script::Compile	v8-api	10.000	pdb-14190493
+20261016195339	0x35080	crom::Game::updateAndPresent	engine	10.000	pdb-14190493
+20261016195339	0x559250	v8::ObjectTemplate::New	v8-api	10.000	pdb-14190493
+20261016195339	0x2f860	netutil::UberProtoPipe::recv	engine	10.000	pdb-14190493
+20261016195339	0x558aa0	v8::Context::New	v8-api	10.000	pdb-14190493
+20261016195339	0x55bae0	v8::Script::Run	v8-api	10.000	pdb-14190493
+20261016195339	0x559040	v8::Isolate::New	v8-api	10.000	pdb-14190493
+20261016195339	0x557320	v8::V8::Initialize	v8-api	10.000	pdb-14190493
+20261016195339	0x55d5b0	v8::ObjectTemplate::SetHandler	v8-api	10.000	pdb-14190493
+20261016195339	0x558bf0	v8::Function::New	v8-api	10.000	pdb-14190493
+20261016195339	0x55c5a0	v8::Template::Set	v8-api	10.000	pdb-14190493
+20261016195339	0x554350	v8::Object::Get	v8-api	10.000	pdb-14190493
+20261016195339	0x5564d0	v8::Context::Global	v8-api	10.000	pdb-14190493
+20261016195339	0x559920	v8::ArrayBuffer::Allocator::NewDefaultAllocator	v8-api	10.000	pdb-14190493
+20261016195339	0x6ebc40	v8::internal::Version::GetString	v8-api	10.000	pdb-14190493
+20261016195339	0x54c0e0	v8::platform::NewDefaultPlatform	v8-api	10.000	pdb-14190493
+20261016195339	0x5549f0	v8::Isolate::GetCurrentContext	v8-api	10.000	pdb-14190493
+20261016195339	0x55c310	v8::Object::Set	v8-api	10.000	pdb-14190493
+20261016195339	0x5590f0	v8::Object::New	v8-api	10.000	pdb-14190493
+14190493	0x3f6320	WindowsFilesystem::resetMounts	engine	static	pdb WindowsFilesystem::resetMounts
