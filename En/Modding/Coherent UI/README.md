@@ -2,6 +2,18 @@
 
 How the shipping client (`PA.exe` build 14190493, Windows x64) talks to Coherent UI: which processes exist, what the executable imports from `CoherentUI64.dll`, which interfaces cross the boundary, how pixels reach the screen, and how JavaScript and native code exchange messages. The material comes from the research in [pa-research-data issue #20](https://github.com/Planetary-Annihilation-Fandom/pa-research-data/issues/20). It applies to the shipping Coherent build only; the CEF dev builds are covered in [CEF](../Debug/07-CEF/README.md).
 
+## Browser version and compatibility
+
+The shipping Coherent UI runtime reports **Chromium 40.0.2214.28** (`Chrome/40.0.2214.28` in `navigator.userAgent`). This was confirmed in the running Windows client, PA build **124685**, on **2026-11-14**. It describes the embedded UI browser; CEF dev builds can use a different runtime.
+
+Target Chromium 40 when writing UI JavaScript and CSS. Modern-browser previews do not establish compatibility with the game. In particular, flexbox `gap` is unsupported: a two-item flex row with `gap:12px` measured a **0 px** gap in the client. Use a child margin for that spacing. For JavaScript compatibility, see the [Chromium 40 reference](../Review/references/chrome40.md).
+
+To check the runtime of an already running test client, evaluate `navigator.userAgent` through [CDP](../Debug/01-Attaching/README.md), for example from the workspace root:
+
+```powershell
+node docs/En/Modding/Debug/cdp.js 9881 game/start/ -e "return navigator.userAgent;"
+```
+
 ## Start here
 
 | Need to understand | Page |
